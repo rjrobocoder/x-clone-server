@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { initServer } from './app/index.js';
 
 async function init() {
