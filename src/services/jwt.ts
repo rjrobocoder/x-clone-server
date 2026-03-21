@@ -14,8 +14,12 @@ class JWTService {
     }
 
     public static decodeToken(token: string) {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JWTUser;
-        return decoded;
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JWTUser;
+            return decoded;
+        } catch (error) {
+            return null;
+        }
     }
 }
 
