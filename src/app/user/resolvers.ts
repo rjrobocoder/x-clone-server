@@ -3,6 +3,7 @@ import { GraphQLError } from "graphql";
 import { prisma } from "../../lib/db.js";
 import JWTService from "../../services/jwt.js";
 import type { GraphqlContext } from "../../interfaces.js";
+import type { User } from "../../lib/generated/prisma/client.js";
 
 interface GoogleTokenResult {
   iss: string;
@@ -71,6 +72,12 @@ const queries = {
         if (!user) throw new GraphQLError('User not found', { extensions: { code: 'UNAUTHORIZED' } });
         return user;
     }
-}
+};
 
-export const resolvers = { queries };
+const extraResolvers = {
+    User: {
+        tweets: async (parent: User) => prisma.tweet.findMany({ where: { authorId: parent.id }})
+    }
+};
+
+export const resolvers = { queries, extraResolvers };
